@@ -3,112 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Article Title - MediumPro</title>
+    <title>Article Title - MediumPro</title> <!-- Will be dynamic later -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header>
-    <div class="container header-flex">
-        <div class="logo">
-            <a href="index.html">MediumPro</a>
-        </div>
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="#">Explore</a></li>
-                <li><a href="#">Bookmarks</a></li>
-                <li><a href="#">Lists</a></li>
-                <li><a href="#">About</a></li>
-            </ul>
-        </nav>
-        <div class="header-actions">
-            <button class="write-button">Write</button>
-            <div class="user-avatar-dropdown">
-                <img src="https://via.placeholder.com/40" alt="User Avatar" class="avatar">
-                <!-- Dropdown content will be added later -->
-            </div>
-        </div>
-    </div>
-</header>
+    <header class="site-header">
+        <!-- Consistent Header -->
+    </header>
 
-<main class="article-page container"> <!-- Add .container for max-width, but override for full-width column if needed -->
-    <div class="article-content-wrapper">
-        <article class="main-article-content">
-            <header class="article-header">
-                <h1>Article Title Goes Here: A Deep Dive</h1>
-                <p class="article-subtitle">An engaging subtitle that draws the reader in.</p>
-                <div class="article-meta-detailed">
-                    <div class="author-info-detailed">
-                        <img src="https://via.placeholder.com/40" alt="Author Avatar" class="author-avatar-detailed">
-                        <div>
-                            <span>Author Name</span>
-                            <button class="follow-button-article">Follow</button>
-                        </div>
-                    </div>
-                    <span>Oct 26, 2023</span> | <span>7 min read</span>
-                </div>
-            </header>
-
-            <div class="article-body">
-                <p><span class="drop-cap">L</span>orem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
-                <h2>A Subheading Within the Article</h2>
-                <p>Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Cras mattis consectetur purus sit amet fermentum. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                <blockquote>
-                    "This is a blockquote. It's a great way to highlight a quote from someone or a key takeaway. It should be visually distinct."
-                </blockquote>
-                <p>Nullam id dolor id nibh ultricies vehicula ut id elit. Curabitur blandit tempus porttitor. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</p>
-            </div>
+    <main class="article-page-content"> <!-- Renamed for clarity from potential 'article-page' if that was a container -->
+        <article>
+            <!-- Full-width text column for article -->
         </article>
-
-        <aside class="sticky-sidebar">
-            <div class="sidebar-content">
-                <div class="author-bio-sidebar">
-                    <h4>About the Author</h4>
-                    <img src="https://via.placeholder.com/60" alt="Author Avatar" class="author-avatar-bio">
-                    <h5>Author Name</h5>
-                    <p>Short bio about the author, their expertise, and interests. Keeping it concise and engaging.</p>
-                    <button class="follow-button">Follow Author</button>
-                </div>
-                <div class="reading-progress">
-                    <div class="progress-bar-container">
-                        <div class="progress-bar" id="articleProgressBar"></div>
-                    </div>
-                    <span>Reading Progress</span>
-                </div>
-                 <div class="floating-toolbar-placeholder-sidebar">
-                    <h4>Toolbar</h4>
-                    <button class="clap-button">❤️ <span class="clap-count-val">0</span></button>
-                    <button class="bookmark-button">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bookmark" viewBox="0 0 16 16">
-                            <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/>
-                        </svg>
-                    </button>
-                     <button class="share-button">Share</button>
-                     <button class="font-size-button">Aa</button>
-                </div>
-            </div>
+        <aside class="sticky-sidebar"> <!-- This was from old plan, review if it fits new sidebar spec -->
+            <!-- This sidebar might be different from the main page's right-sidebar -->
         </aside>
-    </div>
+    </main>
 
-    <!-- Floating toolbar (alternative position, could be activated by JS on scroll) -->
-    <!-- For now, the elements are in the sidebar for simplicity -->
-    <!-- <div class="floating-toolbar-bottom"> ... </div> -->
-</main>
-
-<footer>
-    <div class="container footer-content">
-        <p class="footer-logo">MediumPro – Elevate Your Writing.</p>
-        <nav class="footer-nav">
-            <ul>
-                <li><a href="#">Terms of Service</a></li>
-                <li><a href="#">Privacy Policy</a></li>
-                <li><a href="#">Help Center</a></li>
-            </ul>
-        </nav>
-        <p class="copyright">&copy; 2023 MediumPro. All rights reserved.</p>
-    </div>
-</footer>
+    <footer class="site-footer">
+        <!-- Consistent Footer -->
+    </footer>
 
     <script src="script.js"></script>
 </body>

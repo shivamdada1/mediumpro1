@@ -1,46 +1,928 @@
-/* Basic Reset - Ensure this is at the top */
+/* Reset */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-body {
-    /* Font Choices */
-    /* Headlines: Bold serif (e.g., Charter, Georgia) */
-    /* Body Text: Clean sans-serif (e.g., Inter, Helvetica Neue) */
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; /* Default body font */
-    color: var(--black);
-    background-color: var(--white);
-    line-height: 1.7; /* Generous line height for readability */
-    -webkit-font-smoothing: antialiased; /* Smoother fonts on WebKit */
-    -moz-osx-font-smoothing: grayscale; /* Smoother fonts on Firefox */
-}
-
-/* Monochrome Palette Variables - Ensure this is defined */
+/* Define Deepseek font family placeholders */
+/* In a real scenario, @font-face would be used if font files are hosted,
+   or a <link> to a CDN if available. Since Deepseek is not standard,
+   we'll use common fallbacks but structure it as if 'Deepseek' is the primary. */
 :root {
+    --font-deepseek-bold: 'Deepseek Bold', Georgia, serif; /* Fallback to Georgia */
+    --font-deepseek-regular: 'Deepseek Regular', 'Helvetica Neue', Helvetica, Arial, sans-serif; /* Fallback to Helvetica Neue/Arial */
+
     --black: #000000;
     --white: #FFFFFF;
-    --background-accent: #F5F5F5;
-    --divider-color: #E0E0E0;
-    --text-light-gray: #757575;
-    --dark-background: #111111;
-    --dark-text: #EEEEEE;
-    /* Font Stacks */
-    --font-serif: Georgia, 'Times New Roman', Times, serif;
-    --font-sans-serif: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    /* Other grays from previous plan might be useful, but stick to B&W for now */
+    --background-accent: #F5F5F5; /* For subtle accents if absolutely needed, else avoid */
+    --divider-color: #E0E0E0;   /* For subtle dividers if absolutely needed, else avoid */
+
+    --dark-background: var(--black); /* True black for dark mode */
+    --dark-text: var(--white);   /* True white for dark mode text */
 }
 
-/* Apply serif font to headlines */
+body {
+    font-family: var(--font-deepseek-regular);
+    background-color: var(--white);
+    color: var(--black);
+    line-height: 1.6;
+    display: flex; /* For sticky footer if needed, or general layout */
+    flex-direction: column; /* Stack header, main content, footer */
+    min-height: 100vh; /* Ensure footer can be at bottom */
+}
+
+/* Basic layout for main content area */
+.main-content-area {
+    display: flex;
+    flex: 1; /* Allows this area to grow and push footer down */
+    width: 100%;
+    max-width: 1200px; /* Example max width, adjust as needed */
+    margin: 0 auto; /* Center the content area */
+    padding: 20px; /* Example padding */
+}
+
+.feed-content {
+    flex: 3; /* Takes more space */
+}
+
+.right-sidebar {
+    flex: 1;
+    padding-left: 20px; /* Space from feed */
+    border-left: 1px solid var(--black); /* Strict B&W divider */
+}
+
+/* Dark mode base */
+body.dark-mode {
+    background-color: var(--dark-background);
+    color: var(--dark-text);
+}
+
+body.dark-mode .right-sidebar {
+    border-left: 1px solid var(--dark-text);
+}
+
+/* General Link Styling */
+a {
+    color: var(--black);
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+body.dark-mode a {
+    color: var(--dark-text);
+}
+
+/* Placeholder for header and footer, will be detailed in next step */
+.site-header, .site-footer {
+    padding: 20px;
+    border-bottom: 1px solid var(--black); /* Header bottom border */
+}
+.site-footer {
+    border-top: 1px solid var(--black); /* Footer top border */
+    border-bottom: none;
+}
+
+body.dark-mode .site-header, body.dark-mode .site-footer {
+    border-color: var(--dark-text);
+}
+
+/* All images grayscale by default */
+img {
+    filter: grayscale(100%);
+}
+
+/* Feed Tabs */
+.feed-tabs {
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--black);
+    display: flex;
+}
+.tab-button {
+    font-family: var(--font-deepseek-regular);
+    font-size: 16px;
+    padding: 10px 15px;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--black); /* Use a slightly lighter/gray color for inactive tabs if allowed by "strict B&W" */
+    cursor: pointer;
+    opacity: 0.7;
+}
+.tab-button.active {
+    border-bottom: 2px solid var(--black);
+    color: var(--black);
+    font-weight: bold; /* Or use Deepseek Bold */
+    opacity: 1;
+}
+body.dark-mode .feed-tabs {
+    border-bottom-color: var(--dark-text);
+}
+body.dark-mode .tab-button {
+    color: var(--dark-text);
+    opacity: 0.7;
+}
+body.dark-mode .tab-button.active {
+    border-bottom-color: var(--dark-text);
+    color: var(--dark-text);
+}
+
+/* Article Card Item */
+.articles-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px; /* Space between cards */
+}
+
+.article-card-item {
+    border: 1px solid var(--black); /* Strict B&W border */
+    padding: 20px;
+    background-color: var(--white);
+}
+
+.article-tags {
+    margin-bottom: 10px;
+}
+.tag {
+    font-family: var(--font-deepseek-regular);
+    font-size: 12px;
+    background-color: var(--white); /* Strict B&W: no background color, or use black with white text if inverted */
+    color: var(--black);
+    padding: 3px 8px;
+    border: 1px solid var(--black);
+    border-radius: 15px; /* Rounded tags */
+    margin-right: 5px;
+    text-transform: uppercase; /* Or as desired */
+    display: inline-block; /* Ensure margin/padding is respected */
+}
+
+.article-title-feed {
+    font-family: var(--font-deepseek-bold);
+    font-size: 28px;
+    color: var(--black);
+    margin-bottom: 10px;
+}
+.article-title-feed a {
+    color: inherit; /* Takes color from h3 */
+    text-decoration: none;
+}
+.article-title-feed a:hover {
+    text-decoration: underline;
+}
+
+.article-excerpt-feed {
+    font-family: var(--font-deepseek-regular);
+    font-size: 18px;
+    color: var(--black); /* Strict B&W, no medium gray */
+    opacity: 0.8; /* Use opacity for lighter feel if needed */
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.author-section-feed {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+.author-avatar-feed {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    border: 1px solid var(--black); /* Image already grayscale via global img rule */
+}
+.author-details-feed {
+    display: flex;
+    flex-direction: column; /* Stack name and follow button */
+}
+.author-name-feed {
+    font-family: var(--font-deepseek-regular); /* Or bold if preferred */
+    font-size: 15px;
+    color: var(--black);
+    margin-bottom: 3px; /* Space before follow button */
+}
+.verified-badge {
+    color: var(--black); /* Or a subtle SVG checkmark */
+    font-size: 0.9em;
+    margin-left: 4px;
+}
+.follow-button-feed {
+    font-family: var(--font-deepseek-regular);
+    font-size: 13px;
+    color: var(--black);
+    background-color: var(--white);
+    border: 1px solid var(--black);
+    padding: 4px 10px;
+    border-radius: 15px;
+    cursor: pointer;
+    align-self: flex-start; /* Align to start of flex column */
+}
+.follow-button-feed:hover {
+    background-color: var(--black);
+    color: var(--white);
+}
+
+.article-meta-feed {
+    font-family: var(--font-deepseek-regular);
+    font-size: 13px;
+    color: var(--black);
+    opacity: 0.7; /* Lighter feel */
+    margin-bottom: 15px;
+}
+.article-meta-feed .separator {
+    margin: 0 5px;
+}
+
+.action-buttons-feed {
+    display: flex;
+    gap: 10px; /* Space between buttons */
+    border-top: 1px solid var(--black); /* Divider above actions */
+    padding-top: 15px;
+}
+.button-feed {
+    font-family: var(--font-deepseek-regular);
+    font-size: 14px;
+    background: none;
+    border: 1px solid var(--black); /* Or transparent if only icon */
+    color: var(--black);
+    padding: 6px 10px;
+    border-radius: 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Space between icon and text */
+}
+.button-feed:hover {
+    background-color: var(--black);
+    color: var(--white);
+}
+.button-feed .count {
+    font-size: 0.9em;
+}
+
+/* Dark Mode for Article Cards */
+body.dark-mode .article-card-item {
+    border-color: var(--dark-text);
+    background-color: var(--dark-background);
+}
+body.dark-mode .tag {
+    background-color: var(--dark-background);
+    color: var(--dark-text);
+    border-color: var(--dark-text);
+}
+body.dark-mode .article-title-feed,
+body.dark-mode .article-excerpt-feed,
+body.dark-mode .author-name-feed,
+body.dark-mode .verified-badge,
+body.dark-mode .article-meta-feed {
+    color: var(--dark-text);
+}
+body.dark-mode .follow-button-feed {
+    color: var(--dark-text);
+    background-color: var(--dark-background);
+    border-color: var(--dark-text);
+}
+body.dark-mode .follow-button-feed:hover {
+    background-color: var(--dark-text);
+    color: var(--dark-background);
+}
+body.dark-mode .action-buttons-feed {
+    border-top-color: var(--dark-text);
+}
+body.dark-mode .button-feed {
+    border-color: var(--dark-text);
+    color: var(--dark-text);
+}
+body.dark-mode .button-feed:hover {
+    background-color: var(--dark-text);
+    color: var(--dark-background);
+}
+body.dark-mode .author-avatar-feed {
+    border-color: var(--dark-text);
+}
+
+
+/* General Container for consistent width */
+.container {
+    width: 100%;
+    max-width: 1200px; /* Or your preferred max width */
+    margin: 0 auto;
+    padding: 0 20px; /* Horizontal padding */
+}
+
+/* Header Styles */
+.site-header {
+    background-color: var(--white);
+    color: var(--black);
+    /* padding and border-bottom are already defined in the initial .site-header rules */
+    padding-top: 15px; /* Specific vertical padding */
+    padding-bottom: 15px;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo a {
+    font-family: var(--font-deepseek-bold);
+    font-size: 28px;
+    color: var(--black);
+    text-decoration: none;
+}
+
+.main-navigation ul {
+    list-style: none;
+    display: flex;
+    gap: 25px; /* Space between nav items */
+    padding: 0; /* Remove default padding */
+    margin: 0; /* Remove default margin */
+}
+
+.main-navigation ul li a {
+    font-family: var(--font-deepseek-regular);
+    font-size: 16px;
+    color: var(--black);
+    text-decoration: none;
+}
+
+.main-navigation ul li a:hover {
+    text-decoration: underline;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Space between action items */
+}
+
+.search-form {
+    display: flex;
+    border: 1px solid var(--black);
+    border-radius: 20px; /* Rounded search bar */
+    overflow: hidden; /* Keep input/button inside rounded border */
+}
+
+.search-input {
+    font-family: var(--font-deepseek-regular);
+    border: none;
+    padding: 8px 12px;
+    background-color: var(--white);
+    color: var(--black);
+    outline: none;
+    font-size: 14px;
+}
+.search-input::placeholder {
+    color: var(--black); /* Strict B&W */
+    opacity: 0.7;
+}
+
+.search-button {
+    background-color: var(--white);
+    border: none;
+    color: var(--black);
+    padding: 0 10px; /* Adjust padding for icon */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+.search-button svg {
+    fill: var(--black);
+}
+
+.dark-mode-toggle {
+    background: none;
+    border: none;
+    color: var(--black);
+    cursor: pointer;
+    font-size: 20px; /* Adjust icon size */
+    padding: 5px;
+}
+/* Initially show sun icon, hide moon */
+.dark-mode-toggle .icon-moon { display: none; }
+.dark-mode-toggle .icon-sun { display: inline; }
+
+.user-profile-icon a svg {
+    width: 28px;
+    height: 28px;
+    fill: var(--black);
+    display: block; /* Helps with alignment */
+}
+
+/* Footer Styles */
+.site-footer {
+    background-color: var(--white);
+    color: var(--black);
+    /* padding and border-top are already defined in the initial .site-footer rules */
+    padding-top: 30px; /* Specific vertical padding */
+    padding-bottom: 30px;
+    text-align: center;
+}
+
+.footer-navigation ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 15px;
+    padding: 0; /* Remove default padding */
+}
+
+.footer-navigation ul li a {
+    font-family: var(--font-deepseek-regular);
+    font-size: 14px;
+    color: var(--black);
+    text-decoration: none;
+}
+.footer-navigation ul li a:hover {
+    text-decoration: underline;
+}
+
+.copyright-text {
+    font-family: var(--font-deepseek-regular);
+    font-size: 13px;
+    color: var(--black);
+}
+
+/* Dark Mode Styles for Header & Footer */
+body.dark-mode .site-header {
+    background-color: var(--dark-background);
+    color: var(--dark-text);
+    /* border-bottom-color is already handled by body.dark-mode .site-header */
+}
+
+body.dark-mode .logo a,
+body.dark-mode .main-navigation ul li a,
+body.dark-mode .dark-mode-toggle { /* Removed user-profile-icon a svg as color is for text, fill for svg */
+    color: var(--dark-text);
+}
+
+body.dark-mode .user-profile-icon a svg {
+     fill: var(--dark-text); /* Specifically for SVG fill */
+}
+
+
+body.dark-mode .search-form {
+    border-color: var(--dark-text);
+}
+body.dark-mode .search-input {
+    background-color: var(--dark-background);
+    color: var(--dark-text);
+}
+body.dark-mode .search-input::placeholder {
+    color: var(--dark-text);
+    opacity: 0.7;
+}
+body.dark-mode .search-button {
+    background-color: var(--dark-background);
+    color: var(--dark-text);
+}
+body.dark-mode .search-button svg {
+    fill: var(--dark-text);
+}
+
+/* Dark mode: show moon icon, hide sun */
+body.dark-mode .dark-mode-toggle .icon-moon { display: inline; }
+body.dark-mode .dark-mode-toggle .icon-sun { display: none; }
+
+body.dark-mode .site-footer {
+    background-color: var(--dark-background);
+    color: var(--dark-text);
+    /* border-top-color is already handled by body.dark-mode .site-footer */
+}
+
+body.dark-mode .footer-navigation ul li a,
+body.dark-mode .copyright-text {
+    color: var(--dark-text);
+}
+
+/* Right Sidebar General */
+.right-sidebar {
+    /* flex: 1; padding-left: 20px; border-left: 1px solid var(--black); */ /* Already defined */
+    /* Ensure the global img filter: grayscale(100%) is active */
+}
+
+.sidebar-section {
+    margin-bottom: 30px;
+}
+
+.sidebar-title {
+    font-family: var(--font-deepseek-bold);
+    font-size: 18px; /* Or adjust as needed */
+    color: var(--black);
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--black);
+}
+
+/* Trending on MediumPro */
+.trending-list {
+    list-style: none;
+    padding-left: 0;
+    margin: 0; /* Reset default margin */
+}
+.trending-list li {
+    display: flex;
+    align-items: flex-start; /* Align number with top of text */
+    margin-bottom: 15px;
+    gap: 10px;
+}
+.trending-number {
+    font-family: var(--font-deepseek-bold);
+    font-size: 20px;
+    color: var(--black);
+    opacity: 0.5; /* Lighter number */
+    line-height: 1.2; /* Align with text better */
+}
+.trending-content .trending-title {
+    font-family: var(--font-deepseek-regular); /* Or bold if preferred */
+    font-size: 15px;
+    color: var(--black);
+    text-decoration: none;
+    display: block; /* For margin-bottom */
+    margin-bottom: 3px;
+}
+.trending-content .trending-title:hover {
+    text-decoration: underline;
+}
+.trending-author {
+    font-family: var(--font-deepseek-regular);
+    font-size: 13px;
+    color: var(--black);
+    opacity: 0.7;
+}
+
+/* Recommended Topics */
+.topics-list {
+    list-style: none;
+    padding-left: 0;
+    display: flex;
+    flex-wrap: wrap; /* Allow tags to wrap */
+    gap: 8px;
+    margin: 0; /* Reset default margin */
+}
+.topic-tag { /* Re-use .tag style if it's identical, or make specific */
+    font-family: var(--font-deepseek-regular);
+    font-size: 13px;
+    background-color: var(--white);
+    color: var(--black);
+    padding: 5px 10px;
+    border: 1px solid var(--black);
+    border-radius: 15px;
+    text-decoration: none;
+    display: inline-block; /* Ensure padding/hover works well */
+}
+.topic-tag:hover {
+    background-color: var(--black);
+    color: var(--white);
+    text-decoration: none;
+}
+
+/* Who to follow */
+.follow-suggestions-list {
+    list-style: none;
+    padding-left: 0;
+    margin: 0; /* Reset default margin */
+}
+.follow-suggestions-list li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    gap: 10px;
+}
+.suggest-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--black); /* Avatar already grayscale */
+}
+.suggest-info {
+    flex-grow: 1; /* Allow info to take available space */
+}
+.suggest-name {
+    font-family: var(--font-deepseek-bold);
+    font-size: 15px;
+    color: var(--black);
+    text-decoration: none;
+    display: block;
+}
+.suggest-name:hover {
+    text-decoration: underline;
+}
+.suggest-bio {
+    font-family: var(--font-deepseek-regular);
+    font-size: 13px;
+    color: var(--black);
+    opacity: 0.7;
+    display: block;
+}
+.follow-button-sidebar { /* Can reuse .follow-button-feed if identical */
+    font-family: var(--font-deepseek-regular);
+    font-size: 13px;
+    color: var(--black);
+    background-color: var(--white);
+    border: 1px solid var(--black);
+    padding: 5px 12px;
+    border-radius: 15px;
+    cursor: pointer;
+    white-space: nowrap; /* Prevent "Follow" from wrapping */
+}
+.follow-button-sidebar:hover {
+    background-color: var(--black);
+    color: var(--white);
+}
+
+/* Dark Mode for Sidebar */
+body.dark-mode .sidebar-title {
+    color: var(--dark-text);
+    border-bottom-color: var(--dark-text);
+}
+body.dark-mode .trending-number {
+    opacity: 0.6; /* Adjust opacity for dark mode if needed */
+}
+body.dark-mode .trending-number, /* Ensure trending number color is also dark text */
+body.dark-mode .trending-content .trending-title,
+body.dark-mode .trending-author {
+    color: var(--dark-text);
+}
+body.dark-mode .topic-tag {
+    background-color: var(--dark-background);
+    color: var(--dark-text);
+    border-color: var(--dark-text);
+}
+body.dark-mode .topic-tag:hover {
+    background-color: var(--dark-text);
+    color: var(--dark-background);
+}
+body.dark-mode .suggest-avatar {
+    border-color: var(--dark-text);
+}
+body.dark-mode .suggest-name,
+body.dark-mode .suggest-bio {
+    color: var(--dark-text);
+}
+body.dark-mode .follow-button-sidebar {
+    color: var(--dark-text);
+    background-color: var(--dark-background);
+    border-color: var(--dark-text);
+}
+body.dark-mode .follow-button-sidebar:hover {
+    background-color: var(--dark-text);
+    color: var(--dark-background);
+}
+
+/* --- Button Interactivity Styles --- */
+
+/* Follow Button - 'Following' state */
+.follow-button-feed.following,
+.follow-button-sidebar.following {
+    background-color: var(--black); /* Example: Inverted style for "Following" */
+    color: var(--white);
+    /* Add other styles if needed to differentiate 'Following' state */
+}
+body.dark-mode .follow-button-feed.following,
+body.dark-mode .follow-button-sidebar.following {
+    background-color: var(--dark-text);
+    color: var(--dark-background);
+}
+
+
+/* Clap Button Animation */
+.clap-button-feed.clapped-animation {
+    animation: clap-animation 0.3s ease-in-out;
+}
+@keyframes clap-animation {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+/* Bookmark Button - 'Bookmarked' state */
+/* Using text icon '🔖'. We can make it look "filled" or different. */
+.bookmark-button-feed.bookmarked {
+    /* Example: make it look more prominent */
+    font-weight: bold; /* Make the emoji bolder if font supports */
+    /* Or change background/border if it's not just an icon */
+    /* For a simple text emoji, options are limited. Could also change opacity or add a subtle box-shadow */
+    background-color: var(--black); /* Simulate "filled" */
+    color: var(--white);
+    border-color: var(--black);
+}
+
+body.dark-mode .bookmark-button-feed.bookmarked {
+    background-color: var(--dark-text);
+    color: var(--dark-background);
+    border-color: var(--dark-text);
+}
+
+/* --- Responsive Design --- */
+
+/* Common Breakpoints:
+   - Small devices (phones, landscape phones): up to 767px
+   - Medium devices (tablets): 768px to 991px
+   - Large devices (desktops): 992px and up (already default styles)
+*/
+
+/* Medium devices (tablets) and then small devices will inherit these + override */
+@media (max-width: 991px) {
+    .container {
+        padding: 0 15px; /* Slightly reduce padding for tablets */
+    }
+
+    .main-content-area {
+        flex-direction: column; /* Stack feed and sidebar */
+        padding: 10px; /* Adjust padding */
+    }
+
+    .feed-content {
+        width: 100%;
+    }
+
+    .right-sidebar {
+        width: 100%;
+        padding-left: 0; /* Remove left padding when stacked */
+        margin-top: 30px; /* Add space above when stacked */
+        border-left: none; /* Remove side border when stacked */
+        border-top: 1px solid var(--black); /* Add top border when stacked */
+        padding-top: 20px; /* Add padding above content */
+    }
+    body.dark-mode .right-sidebar {
+        border-top-color: var(--dark-text);
+    }
+
+    .header-container {
+        flex-direction: column; /* Stack header items */
+        gap: 10px; /* Space between stacked header rows */
+    }
+    .main-navigation ul {
+        justify-content: center; /* Center nav links when stacked */
+        flex-wrap: wrap; /* Allow nav items to wrap */
+        gap: 15px; /* Adjust gap for wrapped items */
+        padding-top: 10px; /* Space from logo */
+    }
+    .header-actions {
+        justify-content: center; /* Center actions like search, dark mode toggle */
+        flex-wrap: wrap;
+        width: 100%; /* Allow actions to take full width if needed */
+    }
+    .search-form {
+        width: 80%; /* Make search form wider on tablets */
+        max-width: 400px; /* But not too wide */
+        margin: 0 auto; /* Center it if it's not full width */
+    }
+
+    .article-title-feed {
+        font-size: 24px; /* Slightly smaller title on tablets */
+    }
+    .article-excerpt-feed {
+        font-size: 16px; /* Slightly smaller excerpt */
+    }
+}
+
+
+/* Small devices (phones) */
+@media (max-width: 767px) {
+    .container {
+        padding: 0 10px; /* Further reduce padding for phones */
+    }
+
+    .site-header {
+        padding: 10px 0;
+    }
+    .header-container {
+        gap: 8px;
+    }
+    .logo a {
+        font-size: 24px; /* Adjust logo size */
+    }
+    .main-navigation ul {
+        gap: 10px; /* Reduce gap further */
+        /* font-size: 14px; */ /* Already 16px, let's see if it needs reduction */
+    }
+     .main-navigation ul li a { /* Target links for font size */
+        font-size: 14px;
+    }
+    .header-actions {
+        gap: 10px;
+    }
+    .search-form {
+        width: 100%; /* Full width search on phones */
+        max-width: none;
+    }
+    .dark-mode-toggle {
+        font-size: 18px; /* Adjust icon size */
+    }
+    .user-profile-icon a svg {
+        width: 24px;
+        height: 24px;
+    }
+
+
+    .feed-tabs {
+        justify-content: center; /* Center tabs if they don't fill width */
+    }
+    .tab-button {
+        font-size: 15px;
+        padding: 8px 10px;
+    }
+
+    .article-card-item {
+        padding: 15px; /* Reduce card padding */
+    }
+    .article-title-feed {
+        font-size: 20px; /* Smaller title on phones */
+    }
+    .article-excerpt-feed {
+        font-size: 15px;
+    }
+    .author-avatar-feed {
+        width: 35px;
+        height: 35px;
+    }
+    .author-name-feed {
+        font-size: 14px;
+    }
+    .follow-button-feed {
+        font-size: 12px;
+        padding: 3px 8px;
+    }
+    .action-buttons-feed {
+        flex-wrap: wrap; /* Allow action buttons to wrap */
+        gap: 8px;
+    }
+    .button-feed {
+        font-size: 13px;
+        padding: 5px 8px;
+        flex-grow: 1; /* Allow buttons to grow and fill space if two per line */
+        text-align: center;
+        justify-content: center; /* Center icon + text within button */
+    }
+
+
+    .sidebar-title {
+        font-size: 17px;
+    }
+    .trending-content .trending-title,
+    .suggest-name {
+        font-size: 14px;
+    }
+    .trending-author,
+    .suggest-bio,
+    .topic-tag {
+        font-size: 12px;
+    }
+    .follow-button-sidebar {
+        font-size: 12px;
+        padding: 4px 10px;
+    }
+
+    .footer-navigation ul {
+        flex-direction: column; /* Stack footer links */
+        gap: 8px;
+        margin-bottom: 10px;
+    }
+    .copyright-text {
+        font-size: 12px;
+    }
+}
+
+/* Specific adjustments for very small screens if necessary (e.g., less than 400px) */
+@media (max-width: 400px) {
+    .logo a {
+        font-size: 20px;
+    }
+    .button-feed { /* Ensure buttons are not too wide */
+        min-width: 120px; /* Example min-width */
+        flex-grow: 0; /* Disable grow if they become too large */
+    }
+    /* Further reduce font sizes if necessary */
+}
+
+
+/* Styles from previous plan - to be reviewed and integrated or removed. */
+/* For now, commenting out to avoid conflicts with the new strict B&W approach.
+   These will be addressed in subsequent steps dedicated to specific components.
+
+body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    color: var(--black);
+    background-color: var(--white);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
 h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-serif);
-    font-weight: bold; /* Bold for authority */
-    margin-bottom: 0.75em; /* Generous whitespace */
+    font-weight: bold;
+    margin-bottom: 0.75em;
 }
 
-/* Specific headline styles if not already covered */
 .logo a {
-    font-family: var(--font-serif); /* MediumPro logo */
+    font-family: var(--font-serif);
     font-size: 24px;
     font-weight: bold;
     color: var(--black);
@@ -48,57 +930,44 @@ h1, h2, h3, h4, h5, h6 {
 
 .featured-article h1 {
     font-family: var(--font-serif);
-    font-size: 48px; /* Already set, but ensure serif */
+    font-size: 48px;
     line-height: 1.2;
 }
 
 .article-feed h2 {
     font-family: var(--font-serif);
-    font-size: 32px; /* Already set, but ensure serif */
+    font-size: 32px;
 }
 
 .article-card h3 {
     font-family: var(--font-serif);
-    font-size: 22px; /* Already set, but ensure serif */
+    font-size: 22px;
     line-height: 1.3;
 }
 
-/* Body text elements to use sans-serif explicitly if needed */
 p, .excerpt, .article-metadata, nav ul li a, .card-meta, button, input, textarea, label {
     font-family: var(--font-sans-serif);
 }
 
-/* Line Length Control & Whitespace */
-/* Apply to main content areas like article bodies and descriptions */
 .container, .article-page article {
-    max-width: 700px; /* Optimal reading comfort for main text column */
-    margin-left: auto;
-    margin-right: auto;
-}
-
-/* Override for full-width elements if .container is too narrow for them */
-.header-flex, .hero-section .container /* Allow hero to be wider if design implies */ {
-    max-width: 1200px; /* Previous container width for layout */
-}
-/* For article page, the main article text should be constrained */
-.article-page > article { /* Direct child selector for article content */
     max-width: 700px;
     margin-left: auto;
     margin-right: auto;
-    padding: 20px 0; /* Generous vertical padding */
 }
 
+.header-flex, .hero-section .container {
+    max-width: 1200px;
+}
+.article-page > article {
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 20px 0;
+}
 
-/* Ensure a general padding for sections to contribute to whitespace */
 section {
     padding-top: 40px;
     padding-bottom: 40px;
-}
-
-/* Adjustments for dark mode typography if needed */
-body.dark-mode {
-    color: var(--dark-text);
-    background-color: var(--dark-background);
 }
 
 body.dark-mode .logo a,
@@ -114,46 +983,31 @@ body.dark-mode .article-card h3 a {
 }
 
 body.dark-mode nav ul li a {
-    color: var(--text-light-gray); /* Or a slightly brighter gray for dark mode nav */
+    color: var(--text-light-gray);
 }
 body.dark-mode nav ul li a:hover {
     color: var(--dark-text);
 }
 
 body.dark-mode .excerpt {
-    color: #bbb; /* Adjust if current #aaa is too dark/light */
+    color: #bbb;
 }
 
 body.dark-mode .article-metadata, body.dark-mode .card-meta {
     color: #aaa;
 }
 
-/* Default link styles - ensure they are clear */
-a {
-    color: var(--black);
-    text-decoration: none;
-    font-weight: normal; /* Ensure links aren't bold by default unless specified */
-}
-a:hover {
-    text-decoration: underline;
-}
-body.dark-mode a {
-    color: var(--dark-text);
-}
-
-/* Re-check button font inheritance */
 button {
-    font-family: var(--font-sans-serif); /* Ensure buttons use sans-serif */
+    font-family: var(--font-sans-serif);
 }
 
-/* Basic structure for header, main, footer for now */
 header, footer {
     padding: 20px;
-    border-bottom: 1px solid var(--divider-color); /* Example of divider */
+    border-bottom: 1px solid var(--divider-color);
 }
 
 body.dark-mode header, body.dark-mode footer {
-    border-bottom: 1px solid var(--black); /* Darker divider in dark mode */
+    border-bottom: 1px solid var(--black);
 }
 
 
@@ -161,7 +1015,6 @@ main {
     padding: 20px;
 }
 
-/* Utility classes for theme */
 .bg-accent {
     background-color: var(--background-accent);
 }
@@ -170,15 +1023,11 @@ main {
     border-bottom: 1px solid var(--divider-color);
 }
 
-
-/* All UI elements should be grayscale by default.
-   Specific styles for buttons, icons will be added later
-   but their base color should adhere to the monochrome theme. */
 button, input, textarea {
     font-family: inherit;
     color: var(--black);
     background-color: var(--white);
-    border: 1px solid var(--black); /* Default border for elements */
+    border: 1px solid var(--black);
 }
 
 body.dark-mode button,
@@ -189,16 +1038,15 @@ body.dark-mode textarea {
     border: 1px solid var(--dark-text);
 }
 
-/* Header Styles */
 header {
     background-color: var(--white);
     border-bottom: 1px solid var(--divider-color);
-    padding: 15px 0; /* Adjusted from previous 20px */
+    padding: 15px 0;
 }
 
 body.dark-mode header {
     background-color: var(--dark-background);
-    border-bottom: 1px solid var(--black); /* Darker divider in dark mode */
+    border-bottom: 1px solid var(--black);
 }
 
 .header-flex {
@@ -217,8 +1065,7 @@ nav ul li {
 }
 
 nav ul li a {
-    /* font-family is now var(--font-sans-serif) from above */
-    color: var(--text-light-gray); /* Lighter for nav links */
+    color: var(--text-light-gray);
     font-size: 16px;
 }
 
@@ -233,12 +1080,11 @@ nav ul li a:hover {
 }
 
 .write-button {
-    /* font-family is now var(--font-sans-serif) from above */
     background-color: var(--white);
     color: var(--black);
     border: 1px solid var(--black);
     padding: 8px 15px;
-    border-radius: 20px; /* Rounded button */
+    border-radius: 20px;
     cursor: pointer;
     margin-right: 20px;
     font-size: 15px;
@@ -272,34 +1118,25 @@ body.dark-mode .user-avatar-dropdown .avatar {
     border: 1px solid var(--text-light-gray);
 }
 
-/* Hero Section Styles */
 .hero-section {
-    background-color: var(--background-accent); /* Subtle accent background */
-    padding: 60px 0; /* Adjusted from section default */
-    text-align: center; /* Center the content */
+    background-color: var(--background-accent);
+    padding: 60px 0;
+    text-align: center;
 }
 
 body.dark-mode .hero-section {
-    background-color: var(--black); /* Darker accent for dark mode */
+    background-color: var(--black);
 }
 
-/* .featured-article h1 already handled by global h1 and specific .featured-article h1 styles */
-/* .article-metadata already handled by global p, .excerpt... rule */
 
-/* Ensure the link in h1 is black in light mode and white in dark mode */
-/* body .featured-article h1 a - covered by body.dark-mode .featured-article h1 a and default a */
-
-
-/* Article Feed Styles */
 .article-feed {
-    padding: 40px 0; /* Adjusted from section default */
+    padding: 40px 0;
 }
 
-/* .article-feed h2 already handled by global h2 and specific .article-feed h2 styles */
 
 .feed-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Responsive grid */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 30px;
 }
 
@@ -307,7 +1144,7 @@ body.dark-mode .hero-section {
     background-color: var(--white);
     border: 1px solid var(--divider-color);
     border-radius: 8px;
-    overflow: hidden; /* Ensures content respects border radius */
+    overflow: hidden;
     transition: box-shadow 0.3s ease, border-color 0.3s ease;
     box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
@@ -332,8 +1169,6 @@ body.dark-mode .article-card:hover {
     padding: 20px;
 }
 
-/* .article-card h3 already handled by global h3 and specific .article-card h3 styles */
-/* .excerpt already handled by global p, .excerpt... rule */
 
 .author-info {
     display: flex;
@@ -341,7 +1176,7 @@ body.dark-mode .article-card:hover {
     margin-bottom: 15px;
     font-size: 14px;
     color: var(--black);
-    font-family: var(--font-sans-serif); /* Explicitly sans-serif */
+    font-family: var(--font-sans-serif);
 }
 
 body.dark-mode .author-info {
@@ -360,15 +1195,9 @@ body.dark-mode .author-avatar {
     border-color: var(--text-light-gray);
 }
 
-/* .card-meta already handled by global p, .excerpt... rule */
-
 .clap-count {
-    /* Style for clap count, potentially with icon later */
 }
 
-/* Functional UI Elements */
-
-/* Search Bar */
 .search-bar {
     display: flex;
     align-items: center;
@@ -379,7 +1208,7 @@ body.dark-mode .author-avatar {
     padding: 8px 12px;
     border: 1px solid var(--divider-color);
     border-right: none;
-    border-radius: 20px 0 0 20px; /* Rounded input left side */
+    border-radius: 20px 0 0 20px;
     font-size: 14px;
     background-color: var(--background-accent);
     color: var(--black);
@@ -397,7 +1226,7 @@ body.dark-mode .author-avatar {
     background-color: var(--background-accent);
     color: var(--black);
     cursor: pointer;
-    border-radius: 0 20px 20px 0; /* Rounded button right side */
+    border-radius: 0 20px 20px 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -408,7 +1237,7 @@ body.dark-mode .author-avatar {
 }
 
 body.dark-mode .search-bar input[type="search"] {
-    background-color: #222; /* Darker accent for search input */
+    background-color: #222;
     color: var(--dark-text);
     border-color: var(--text-light-gray);
 }
@@ -427,7 +1256,6 @@ body.dark-mode .search-bar button[type="submit"] svg {
     fill: var(--dark-text);
 }
 
-/* Dark Mode Toggle Button */
 .dark-mode-toggle {
     padding: 8px 12px;
     border: 1px solid var(--black);
@@ -437,7 +1265,7 @@ body.dark-mode .search-bar button[type="submit"] svg {
     cursor: pointer;
     font-size: 14px;
     margin-right: 15px;
-    font-family: var(--font-sans-serif); /* Ensure sans-serif */
+    font-family: var(--font-sans-serif);
 }
 
 .dark-mode-toggle:hover {
@@ -456,12 +1284,11 @@ body.dark-mode .dark-mode-toggle:hover {
     color: var(--dark-background);
 }
 
-/* Action Buttons on Cards */
 .card-actions {
     display: flex;
     align-items: center;
-    gap: 10px; /* Space between buttons */
-    margin-top: 15px; /* Space above the buttons */
+    gap: 10px;
+    margin-top: 15px;
     padding-top: 15px;
     border-top: 1px solid var(--divider-color);
 }
@@ -479,10 +1306,9 @@ body.dark-mode .card-actions {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-family: var(--font-sans-serif); /* Ensure sans-serif */
+    font-family: var(--font-sans-serif);
 }
 
-/* Follow Button: Outlined black */
 .follow-button {
     border: 1px solid var(--black);
     color: var(--black);
@@ -503,11 +1329,10 @@ body.dark-mode .follow-button:hover {
     color: var(--dark-background);
 }
 
-/* Clap Button: Animated fill-from-bottom (placeholder styling for now) */
 .clap-button {
     border: 1px solid var(--text-light-gray);
     color: var(--text-light-gray);
-    gap: 5px; /* Space between icon and count */
+    gap: 5px;
 }
 
 .clap-button:hover {
@@ -515,9 +1340,8 @@ body.dark-mode .follow-button:hover {
     color: var(--black);
 }
 
-/* Basic fill effect on hover for now, true animation later */
 .clap-button.clapped, .clap-button:active {
-    background-color: var(--black); /* Simulating fill */
+    background-color: var(--black);
     color: var(--white);
     border-color: var(--black);
 }
@@ -539,16 +1363,14 @@ body.dark-mode .clap-button.clapped, body.dark-mode .clap-button:active {
     border-color: var(--dark-text);
 }
 
-
-/* Bookmark Button: Simple bookmark icon */
 .bookmark-button {
-    border: 1px solid transparent; /* Borderless, icon only */
+    border: 1px solid transparent;
     color: var(--text-light-gray);
-    padding: 5px; /* Small padding for icon */
+    padding: 5px;
 }
 
 .bookmark-button svg {
-    width: 18px; /* Slightly larger icon */
+    width: 18px;
     height: 18px;
     fill: currentColor;
 }
@@ -565,26 +1387,24 @@ body.dark-mode .bookmark-button:hover, body.dark-mode .bookmark-button.bookmarke
     color: var(--dark-text);
 }
 
-/* Remove clap count from .card-meta if it's now in .clap-button */
 .card-meta .clap-count {
     display: none;
 }
 
-/* Article Page Design */
 .article-page.container {
-    max-width: 1100px; /* Wider container for article page layout with sidebar */
+    max-width: 1100px;
 }
 
 .article-content-wrapper {
     display: flex;
-    gap: 40px; /* Space between article and sidebar */
+    gap: 40px;
     padding-top: 30px;
 }
 
 .main-article-content {
-    flex: 3; /* Article takes more space */
-    max-width: 700px; /* Constrain text width for readability */
-    margin: 0 auto; /* Center if sidebar is not present or on small screens */
+    flex: 3;
+    max-width: 700px;
+    margin: 0 auto;
 }
 
 .article-header {
@@ -598,7 +1418,7 @@ body.dark-mode .article-header {
 }
 
 .article-header h1 {
-    font-size: 40px; /* Slightly smaller than hero headline */
+    font-size: 40px;
     font-family: var(--font-serif);
     color: var(--black);
     line-height: 1.2;
@@ -636,7 +1456,7 @@ body.dark-mode .author-info-detailed {
     border-radius: 50%;
 }
 
-.follow-button-article { /* Specific follow button for article header */
+.follow-button-article {
     font-size: 13px;
     padding: 5px 10px;
     border: 1px solid var(--black);
@@ -669,21 +1489,21 @@ body.dark-mode .article-subtitle, body.dark-mode .article-meta-detailed {
 
 
 .article-body {
-    font-size: 18px; /* Comfortable reading size */
-    line-height: 1.8; /* Increased line height for article body */
-    color: #333; /* Slightly softer black for body text */
+    font-size: 18px;
+    line-height: 1.8;
+    color: #333;
 }
 
 body.dark-mode .article-body {
-    color: #ccc; /* Softer white for dark mode body text */
+    color: #ccc;
 }
 
 .article-body p {
     margin-bottom: 1.5em;
-    font-family: var(--font-sans-serif); /* Ensure sans-serif for body */
+    font-family: var(--font-sans-serif);
 }
 
-.article-body h2 { /* Subheadings within article */
+.article-body h2 {
     font-size: 28px;
     font-family: var(--font-serif);
     margin-top: 2em;
@@ -696,10 +1516,10 @@ body.dark-mode .article-body h2 {
 
 .drop-cap {
     float: left;
-    font-size: 4em; /* Large drop cap */
+    font-size: 4em;
     line-height: 0.8em;
     margin-right: 0.1em;
-    margin-bottom: -0.1em; /* Adjust alignment */
+    margin-bottom: -0.1em;
     font-family: var(--font-serif);
     color: var(--black);
     font-weight: bold;
@@ -713,7 +1533,7 @@ blockquote {
     padding-left: 20px;
     border-left: 3px solid var(--black);
     font-style: italic;
-    font-size: 1.1em; /* Slightly larger for emphasis */
+    font-size: 1.1em;
     color: var(--text-light-gray);
 }
 body.dark-mode blockquote {
@@ -721,15 +1541,14 @@ body.dark-mode blockquote {
     color: #aaa;
 }
 
-/* Sticky Sidebar */
 .sticky-sidebar {
     flex: 1;
-    max-width: 300px; /* Max width for sidebar */
+    max-width: 300px;
     position: sticky;
-    top: 20px; /* Adjust based on header height if header is also sticky */
-    height: calc(100vh - 40px); /* Example height, adjust as needed */
-    overflow-y: auto; /* If content overflows */
-    padding-left: 20px; /* Some space from the article */
+    top: 20px;
+    height: calc(100vh - 40px);
+    overflow-y: auto;
+    padding-left: 20px;
     border-left: 1px solid var(--divider-color);
 }
 
@@ -753,7 +1572,7 @@ body.dark-mode .sidebar-content h4 {
 
 .author-bio-sidebar {
     margin-bottom: 30px;
-    text-align: center; /* Center bio content */
+    text-align: center;
 }
 .author-avatar-bio {
     width: 80px;
@@ -763,7 +1582,7 @@ body.dark-mode .sidebar-content h4 {
 }
 .author-bio-sidebar h5 {
     font-size: 16px;
-    font-family: var(--font-sans-serif); /* Name can be sans-serif here */
+    font-family: var(--font-sans-serif);
     font-weight: bold;
     margin-bottom: 5px;
     color: var(--black);
@@ -780,13 +1599,11 @@ body.dark-mode .author-bio-sidebar h5 {
 body.dark-mode .author-bio-sidebar p {
     color: #aaa;
 }
-/* Use existing .follow-button style or create a new one if needed */
 .author-bio-sidebar .follow-button {
-    width: 100%; /* Full width follow button */
+    width: 100%;
 }
 
 
-/* Reading Progress Indicator */
 .reading-progress {
     margin-bottom: 30px;
     text-align: center;
@@ -799,7 +1616,7 @@ body.dark-mode .author-bio-sidebar p {
     margin-bottom: 5px;
 }
 .progress-bar {
-    width: 0%; /* Will be updated by JS */
+    width: 0%;
     height: 100%;
     background-color: var(--black);
     border-radius: 2px;
@@ -812,12 +1629,10 @@ body.dark-mode .progress-bar {
     color: var(--text-light-gray);
 }
 
-/* Floating Toolbar (Placeholder in Sidebar) */
 .floating-toolbar-placeholder-sidebar {
-    /* Styles for the toolbar elements if they are kept in sidebar */
 }
 .floating-toolbar-placeholder-sidebar button {
-    display: block; /* Stack buttons */
+    display: block;
     width: 100%;
     margin-bottom: 10px;
     text-align: left;
@@ -861,18 +1676,17 @@ body.dark-mode .floating-toolbar-placeholder-sidebar button:hover svg {
 }
 
 
-/* Responsive: On smaller screens, stack article and sidebar */
 @media (max-width: 992px) {
     .article-content-wrapper {
         flex-direction: column;
     }
     .main-article-content {
         width: 100%;
-        max-width: 100%; /* Allow full width */
+        max-width: 100%;
         margin: 0;
     }
     .sticky-sidebar {
-        position: static; /* Disable sticky */
+        position: static;
         height: auto;
         max-width: 100%;
         border-left: none;
@@ -886,28 +1700,26 @@ body.dark-mode .floating-toolbar-placeholder-sidebar button:hover svg {
     }
 }
 
-/* Footer Styles */
 footer {
-    background-color: var(--background-accent); /* Light gray background */
+    background-color: var(--background-accent);
     color: var(--text-light-gray);
     padding: 30px 0;
     border-top: 1px solid var(--divider-color);
-    text-align: center; /* Center content by default */
+    text-align: center;
 }
 
 body.dark-mode footer {
-    background-color: #1a1a1a; /* Slightly lighter than pure black for footer bg */
+    background-color: #1a1a1a;
     color: #aaa;
-    border-top: 1px solid #333; /* Darker divider */
+    border-top: 1px solid #333;
 }
 
 .footer-content {
-    /* Container already handles max-width and centering */
 }
 
 .footer-logo {
     font-size: 18px;
-    font-family: var(--font-serif); /* Use serif for the tagline */
+    font-family: var(--font-serif);
     color: var(--black);
     margin-bottom: 15px;
 }
@@ -922,7 +1734,7 @@ body.dark-mode .footer-logo {
     margin: 0 0 15px 0;
     display: flex;
     justify-content: center;
-    gap: 20px; /* Space between links */
+    gap: 20px;
 }
 
 .footer-nav ul li a {
@@ -953,3 +1765,6 @@ body.dark-mode .footer-nav ul li a:hover {
 body.dark-mode .copyright {
     color: #888;
 }
+
+*/
+>>>>>>> REPLACE

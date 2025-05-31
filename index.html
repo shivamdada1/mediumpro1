@@ -5,111 +5,142 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MediumPro</title>
     <link rel="stylesheet" href="style.css">
+    <!-- Attempt to link Deepseek font (example, if a URL is found) -->
+    <!-- <link href="https://fonts.cdn.com/deepseek..." rel="stylesheet"> -->
 </head>
 <body>
-<header>
-    <div class="container header-flex">
+<header class="site-header">
+    <div class="container header-container">
         <div class="logo">
             <a href="index.html">MediumPro</a>
         </div>
-        <nav>
+        <nav class="main-navigation">
             <ul>
                 <li><a href="index.html">Home</a></li>
                 <li><a href="#">Explore</a></li>
                 <li><a href="#">Bookmarks</a></li>
-                <li><a href="#">Lists</a></li>
                 <li><a href="#">About</a></li>
             </ul>
         </nav>
         <div class="header-actions">
-            <form class="search-bar">
-                <input type="search" placeholder="Search...">
-                <button type="submit">
+            <form class="search-form">
+                <input type="search" placeholder="Search..." class="search-input">
+                <button type="submit" class="search-button">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                         <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
                     </svg>
                 </button>
             </form>
-            <button class="dark-mode-toggle">Toggle Dark</button> <!-- Simple toggle button -->
-            <button class="write-button">Write</button>
-            <div class="user-avatar-dropdown">
-                <img src="https://via.placeholder.com/40" alt="User Avatar" class="avatar">
-                <!-- Dropdown content will be added later -->
+            <button class="dark-mode-toggle" aria-label="Toggle dark mode">
+                <span class="icon-sun">☼</span>
+                <span class="icon-moon">☾</span>
+            </button>
+            <div class="user-profile-icon">
+                <a href="#" aria-label="User profile">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                    </svg>
+                </a>
             </div>
         </div>
     </div>
 </header>
 
-    <main>
-        <section class="hero-section">
-            <div class="container">
-                <div class="featured-article">
-                    <h1><a href="article.html">Featured Article: The Future of Minimalist Design</a></h1>
-                    <div class="article-metadata">
-                        <span>By Author Name</span> | <span>Oct 26, 2023</span> | <span>7 min read</span>
-                    </div>
-                </div>
+    <div class="main-content-area">
+        <main class="feed-content">
+            <div class="feed-tabs">
+                <button class="tab-button active" data-tab="for-you">For You</button>
+                <button class="tab-button" data-tab="trending">Trending</button>
+                <!-- More tabs can be added here -->
             </div>
-        </section>
-
-        <section class="article-feed">
-            <div class="container">
-                <h2>Recent Articles</h2>
-                <div class="feed-grid">
-                    <!-- Article Card 1 -->
-                    <div class="article-card">
-                        <div class="card-content">
-                            <h3><a href="article.html">Understanding Monochrome UI</a></h3>
-                            <p class="excerpt">A deep dive into the principles of black and white design aesthetics and their impact on user experience.</p>
-                            <div class="author-info">
-                                <img src="https://via.placeholder.com/30" alt="Author Avatar" class="author-avatar">
-                                <span>Author One</span>
-                            </div>
-                            <div class="card-meta">
-                                <span>Oct 25, 2023</span> | <span class="clap-count">❤️ 150</span> | <span>5 min read</span>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Article Card 2 -->
-                    <div class="article-card">
-                        <div class="card-content">
-                            <h3><a href="article.html">The Art of Readability</a></h3>
-                            <p class="excerpt">Exploring font choices, line length, and whitespace for optimal content consumption in modern web design.</p>
-                            <div class="author-info">
-                                <img src="https://via.placeholder.com/30" alt="Author Avatar" class="author-avatar">
-                                <span>Author Two</span>
-                            </div>
-                    <div class="card-actions">
-                        <button class="follow-button">Follow</button>
-                        <button class="clap-button">❤️ <span class="clap-count-val">210</span></button>
-                        <button class="bookmark-button">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bookmark" viewBox="0 0 16 16">
-                                <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/>
-                            </svg>
-                        </button>
-                    </div>
-                    <div class="card-meta">
-                        <span>Oct 24, 2023</span> | <span>6 min read</span> <!-- Clap count moved to button -->
-                    </div>
-                        </div>
-                    </div>
-                    <!-- Add more cards as needed -->
-                </div>
+            <div class="articles-list-container">
+                <!-- Articles will be dynamically injected here -->
             </div>
-        </section>
-    </main>
+        </main>
+        <aside class="right-sidebar">
+            <section class="sidebar-section" id="trending-on-mediumpro">
+                <h4 class="sidebar-title">Trending on MediumPro</h4>
+                <ol class="trending-list">
+                    <li>
+                        <span class="trending-number">01</span>
+                        <div class="trending-content">
+                            <a href="#" class="trending-title">The Rise of Quantum Computing</a>
+                            <span class="trending-author">By Jane Doe</span>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="trending-number">02</span>
+                        <div class="trending-content">
+                            <a href="#" class="trending-title">Ethical AI: Navigating the Future</a>
+                            <span class="trending-author">By John Smith</span>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="trending-number">03</span>
+                        <div class="trending-content">
+                            <a href="#" class="trending-title">Minimalism in Digital Product Design</a>
+                            <span class="trending-author">By Alex Green</span>
+                        </div>
+                    </li>
+                </ol>
+            </section>
 
-<footer>
-    <div class="container footer-content">
-        <p class="footer-logo">MediumPro – Elevate Your Writing.</p>
-        <nav class="footer-nav">
+            <section class="sidebar-section" id="recommended-topics">
+                <h4 class="sidebar-title">Recommended Topics</h4>
+                <ul class="topics-list">
+                    <li><a href="#" class="topic-tag">Technology</a></li>
+                    <li><a href="#" class="topic-tag">Programming</a></li>
+                    <li><a href="#" class="topic-tag">Design</a></li>
+                    <li><a href="#" class="topic-tag">Artificial Intelligence</a></li>
+                    <li><a href="#" class="topic-tag">Science</a></li>
+                    <li><a href="#" class="topic-tag">Self Improvement</a></li>
+                </ul>
+            </section>
+
+            <section class="sidebar-section" id="who-to-follow">
+                <h4 class="sidebar-title">Who to follow</h4>
+                <ul class="follow-suggestions-list">
+                    <li>
+                        <img src="https://via.placeholder.com/40?text=U1" alt="User One" class="suggest-avatar">
+                        <div class="suggest-info">
+                            <a href="#" class="suggest-name">User One</a>
+                            <span class="suggest-bio">Writes about innovative tech.</span>
+                        </div>
+                        <button class="follow-button-sidebar">Follow</button>
+                    </li>
+                    <li>
+                        <img src="https://via.placeholder.com/40?text=U2" alt="User Two" class="suggest-avatar">
+                        <div class="suggest-info">
+                            <a href="#" class="suggest-name">User Two</a>
+                            <span class="suggest-bio">Designer & Creative Thinker.</span>
+                        </div>
+                        <button class="follow-button-sidebar">Follow</button>
+                    </li>
+                    <li>
+                        <img src="https://via.placeholder.com/40?text=U3" alt="User Three" class="suggest-avatar">
+                        <div class="suggest-info">
+                            <a href="#" class="suggest-name">User Three</a>
+                            <span class="suggest-bio">Exploring the future of AI.</span>
+                        </div>
+                        <button class="follow-button-sidebar">Follow</button>
+                    </li>
+                </ul>
+            </section>
+        </aside>
+    </div>
+
+<footer class="site-footer">
+    <div class="container footer-container">
+        <nav class="footer-navigation">
             <ul>
-                <li><a href="#">Terms of Service</a></li>
-                <li><a href="#">Privacy Policy</a></li>
-                <li><a href="#">Help Center</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Careers</a></li>
+                <li><a href="#">Contact</a></li>
+                <li><a href="#">Terms</a></li>
+                <li><a href="#">Privacy</a></li>
             </ul>
         </nav>
-        <p class="copyright">&copy; 2023 MediumPro. All rights reserved.</p>
+        <p class="copyright-text">&copy; 2025 MediumPro. All rights reserved.</p>
     </div>
 </footer>
 
